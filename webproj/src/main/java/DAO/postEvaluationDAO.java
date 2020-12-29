@@ -15,7 +15,8 @@ public class postEvaluationDAO {
         ArrayList<_postEvaluation> postsEval = new ArrayList<_postEvaluation>();
 
         try {
-            ResultSet rSet = dbProvider.dbExecuteQuery("EXEC getTenArticlesEval @pageNum = " + pageNum + ", @category = N'" + category + "'");
+            // ResultSet rSet = dbProvider.dbExecuteQuery("EXEC getTenArticlesEval @pageNum = " + pageNum + ", @category = N'" + category + "'");
+            ResultSet rSet = dbProvider.dbExecuteQuery("CALL getTenArticlesEval(" + pageNum + ", N'" + category + "');");
 
             while(rSet.next()) {
                 _postEvaluation tempEval = new _postEvaluation();

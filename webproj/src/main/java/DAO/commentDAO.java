@@ -20,7 +20,8 @@ public class commentDAO {
         DBProvider dbProvider = new DBProvider();
         try
         {
-            dbProvider.dbExecuteUpdate("EXEC dbo.insComment @author = '" + cmt.getAuthor() + "',  @postid = " + cmt.getPostId() + ", @content = N'" + cmt.getContent() + "'");
+            // dbProvider.dbExecuteUpdate("EXEC dbo.insComment @author = '" + cmt.getAuthor() + "',  @postid = " + cmt.getPostId() + ", @content = N'" + cmt.getContent() + "'");
+            dbProvider.dbExecuteUpdate("CALL insComment('" + cmt.getAuthor() + "'," + cmt.getPostId() + ", N'" + cmt.getContent() + "');");
         }
         catch(Exception ex) {
             ex.printStackTrace();
@@ -34,7 +35,8 @@ public class commentDAO {
         ResultSet rSet = null;
 
         try {
-            rSet = dbProvider.dbExecuteQuery("SELECT * FROM [dbo].[tb_comments] WHERE c_postid = '" + postId + "' ORDER BY c_datetime DESC");
+            // rSet = dbProvider.dbExecuteQuery("SELECT * FROM [dbo].[tb_comments] WHERE c_postid = '" + postId + "' ORDER BY c_datetime DESC");
+            rSet = dbProvider.dbExecuteQuery("SELECT * FROM tb_comments WHERE c_postid = " + postId + " ORDER BY c_datetime DESC");
 
             while(rSet.next()) {
                 _comment tempcmt = new _comment();

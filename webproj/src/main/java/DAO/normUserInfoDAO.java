@@ -14,7 +14,8 @@ public class normUserInfoDAO {
         String avtUrl = "";
 
         try {
-            ResultSet rSet = dbProvider.dbExecuteQuery("SELECT c_avatar FROM [dbo].[tb_norm_user_info] WHERE c_nuname = '" + userName + "'");
+            // ResultSet rSet = dbProvider.dbExecuteQuery("SELECT c_avatar FROM [dbo].[tb_norm_user_info] WHERE c_nuname = '" + userName + "'");
+            ResultSet rSet = dbProvider.dbExecuteQuery("SELECT c_avatar FROM tb_norm_user_info WHERE c_nuname = '" + userName + "'");
             while(rSet.next()) {
                 avtUrl = rSet.getString("c_avatar");
                 break;
@@ -30,7 +31,8 @@ public class normUserInfoDAO {
         DBProvider dbProvider = new DBProvider();
 
         try {
-            dbProvider.dbExecuteUpdate("EXEC dbo.changeAvtNorm @uname = '" + normUser.getUsername() + "', @avtlink = '" + normUser.getUserAvatar() + "'");
+            // dbProvider.dbExecuteUpdate("EXEC dbo.changeAvtNorm @uname = '" + normUser.getUsername() + "', @avtlink = '" + normUser.getUserAvatar() + "'");
+            dbProvider.dbExecuteUpdate("CALL changeAvtNorm('" + normUser.getUsername() + "',N'" + normUser.getUserAvatar() + "');");
         } catch (Exception e) {
             e.printStackTrace();
         }

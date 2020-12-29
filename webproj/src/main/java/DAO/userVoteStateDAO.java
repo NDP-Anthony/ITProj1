@@ -13,7 +13,8 @@ public class userVoteStateDAO {
         DBProvider dbProvider = new DBProvider();
 
         try {
-            dbProvider.dbExecuteUpdate("EXEC dbo.changeVoteState @postId = " + uVS.getPostId() + ", @uname = '" + uVS.getUsername() + "', @voteState = " + uVS.getVoteState());
+            // dbProvider.dbExecuteUpdate("EXEC dbo.changeVoteState @postId = " + uVS.getPostId() + ", @uname = '" + uVS.getUsername() + "', @voteState = " + uVS.getVoteState());
+            dbProvider.dbExecuteUpdate("CALL changeVoteState(" + uVS.getPostId() + ", '" + uVS.getUsername() + "', " + uVS.getVoteState() + ");");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -24,6 +25,7 @@ public class userVoteStateDAO {
         int tempUVS = 2;
 
         try {
+            // ResultSet rSet = dbProvider.dbExecuteQuery("SELECT * FROM tb_userVoteState WHERE c_nuname = '" + uVS.getUsername() + "' AND c_postid = " + uVS.getPostId());
             ResultSet rSet = dbProvider.dbExecuteQuery("SELECT * FROM tb_userVoteState WHERE c_nuname = '" + uVS.getUsername() + "' AND c_postid = " + uVS.getPostId());
             while (rSet.next()) {
                 tempUVS = rSet.getInt("c_voteStatus");

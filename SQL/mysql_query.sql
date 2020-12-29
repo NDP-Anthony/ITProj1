@@ -97,12 +97,13 @@ BEGIN
     VALUES
     (   Aauthor,        -- c_author - varchar(30)
         Apostid,         -- c_postid - int
-        GETDATE(), -- c_datetime - datetime
+        NOW(), -- c_datetime - datetime
         Acontent        -- c_content - LONGTEXT
         );
 END;
 
 -- CALL itproject1.insComment(:Aauthor,:Apostid,:Acontent);
+-- CALL itproject1.insComment('', 1, N'');
 
 CREATE PROCEDURE insMod
 (IN Auname VARCHAR(30), IN Apasswd VARCHAR(70), IN Adisname NVARCHAR(100))
@@ -128,6 +129,7 @@ BEGIN
 END;
 
 -- CALL itproject1.insMod(:Auname,:Apasswd,:Adisname);
+-- CALL itproject1.insMod('', '', N'');
 
 CREATE PROCEDURE changePasswdMod
 (IN Auname VARCHAR(30), IN Apasswd VARCHAR(70))
@@ -138,6 +140,7 @@ BEGIN
 END;
 
 -- CALL itproject1.changePasswdMod(:Auname,:Apasswd);
+-- CALL itproject1.changePasswdMod('', '');
 
 CREATE PROCEDURE insNormUser
 (IN Auname VARCHAR(30), IN Apasswd VARCHAR(70))
@@ -163,6 +166,7 @@ BEGIN
 END;
 
 -- CALL itproject1.insNormUser(:Auname,:Apasswd);
+-- CALL itproject1.insNormUser('', '');
 
 CREATE PROCEDURE changePasswdNorm
 (IN Auname VARCHAR(30), IN Apasswd VARCHAR(70))
@@ -172,7 +176,19 @@ BEGIN
 	WHERE c_nuname = Auname;
 END;
 
--- CALL itproject1.changePasswdMod(:Auname,:Apasswd);
+-- CALL itproject1.changePasswdNorm(:Auname,:Apasswd);
+-- CALL itproject1.changePasswdMod('', '');
+
+CREATE PROCEDURE changeAvtNorm
+(IN Auname VARCHAR(30), IN Aavtlink VARCHAR(500))
+BEGIN
+    UPDATE itproject1.tb_norm_user_info
+	SET c_avatar = Aavtlink
+	WHERE c_nuname = Auname;
+END;
+
+-- CALL itproject1.changeAvtNorm(:Auname,:Aavtlink);
+-- CALL itproject1.changeAvtNorm('',N'');
 
 CREATE PROCEDURE insPost
 (IN Atitle NVARCHAR(500), IN Adescription LONGTEXT, IN Acontent LONGTEXT, IN Aauthor VARCHAR(30), IN Aaurl NVARCHAR(500), IN Acategory NVARCHAR(50), IN AthumbUrl NVARCHAR(500))
@@ -194,17 +210,17 @@ BEGIN
 	(   Atitle,       -- c_title - nvarchar(500)
 	    Adescription,       -- c_description - LONGTEXT
 	    Acontent,       -- c_content - LONGTEXT
-	    GETDATE(), -- c_datetime_created - datetime
+	    NOW(), -- c_datetime_created - datetime
 	    Aauthor,        -- c_author - varchar(30)
 	    Aaurl,       -- c_aurl - nvarchar(500)
 	    Acategory,       -- c_category - nvarchar(50)
 	    AthumbUrl        -- c_thumbnailUrl - nvarchar(500)
 	    );
 
-	SELECT AfindPostId = c_postid
-	FROM itproject1.tb_posts
-	ORDER BY c_datetime_created DESC
-	LIMIT 1;
+	SET @AfindPostId =	(SELECT c_postid
+			FROM itproject1.tb_posts
+			ORDER BY c_postid DESC
+			LIMIT 1);
 
 	INSERT itproject1.tb_post_evaluation
 	(
@@ -213,13 +229,14 @@ BEGIN
 	    c_downvote
 	)
 	VALUES
-	(   AfindPostId, -- c_postid - int
+	(   @AfindPostId, -- c_postid - int
 	    0, -- c_upvote - int
 	    0  -- c_downvote - int
 	    );
 END;
 
 -- CALL itproject1.insPost(:Atitle,:Adescription,:Acontent,:Aauthor,:Aaurl,:Acategory,:AthumbUrl);
+-- CALL itproject1.insPost(N'', N'', N'', '', N'', N'', N'');
 
 CREATE PROCEDURE changePostEval
 (IN ApostId INT, IN Aupv INT, IN Adownv INT)
@@ -230,6 +247,7 @@ BEGIN
 END;
 
 -- CALL itproject1.changePostEval(:ApostId,:Aupv,:Adownv);
+-- CALL itproject1.changePostEval(1, 0, 0);
 
 CREATE PROCEDURE changeVoteState
 (IN ApostId INT, IN Auname VARCHAR(30), IN AvoteState INT)	-- 1: up | 0: down | 2: delete record
@@ -311,6 +329,7 @@ BEGIN
 END;
 
 -- CALL itproject1.changeVoteState(:ApostId,:Auname,:AvoteState);
+-- CALL itproject1.changeVoteState(1, '', 1);
 
 CREATE PROCEDURE getTenArticles
 (IN ApageNum INT, IN Acategory NVARCHAR(50))
@@ -335,7 +354,8 @@ BEGIN
 	END IF;
 END;
 
--- CALL itproject1.getTenArticles(1,'android');
+-- CALL itproject1.getTenArticlesEval(:ApageNum,:Acategory);
+-- CALL itproject1.getTenArticles(1,N'android');
 
 CREATE PROCEDURE getTenArticlesEval
 (IN ApageNum INT, IN Acategory NVARCHAR(50))
@@ -361,3 +381,4 @@ BEGIN
 END;
 
 -- CALL itproject1.getTenArticlesEval(:ApageNum,:Acategory);
+-- CALL itproject1.getTenArticlesEval(1, N'');

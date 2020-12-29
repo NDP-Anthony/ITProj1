@@ -15,7 +15,8 @@ public class postDAO {
         DBProvider dbProvider = new DBProvider();
 
         try {
-            dbProvider.dbExecuteUpdate("EXEC dbo.insPost @title = N'" + p_post.getTitle() + "', @description = N'" + p_post.getDescription() + "', @content = N'" + p_post.getContent() + "', @author = '" + p_post.getAuthor() + "', @aurl = N'" + p_post.getArticleUrl() + "', @category = N'" + p_post.getCategory() + "', @thumbUrl = N'" + p_post.getThumbnailUrl() + "'");
+            // dbProvider.dbExecuteUpdate("EXEC dbo.insPost @title = N'" + p_post.getTitle() + "', @description = N'" + p_post.getDescription() + "', @content = N'" + p_post.getContent() + "', @author = '" + p_post.getAuthor() + "', @aurl = N'" + p_post.getArticleUrl() + "', @category = N'" + p_post.getCategory() + "', @thumbUrl = N'" + p_post.getThumbnailUrl() + "'");
+            dbProvider.dbExecuteUpdate("CALL insPost(N'" + p_post.getTitle() + "', N'" + p_post.getDescription() + "', N'" + p_post.getContent() + "', '" + p_post.getAuthor() + "', N'" + p_post.getArticleUrl() + "', N'" + p_post.getCategory() + "', N'" + p_post.getThumbnailUrl() + "');");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -27,9 +28,9 @@ public class postDAO {
         DBProvider dbProvider = new DBProvider();
 
         try {
-            ResultSet rSet = dbProvider.dbExecuteQuery("EXEC getTenArticles @pageNum = " + pageNumber + ", @category = N'" + category + "'");
+            // ResultSet rSet = dbProvider.dbExecuteQuery("EXEC getTenArticles @pageNum = " + pageNumber + ", @category = N'" + category + "'");
+            ResultSet rSet = dbProvider.dbExecuteQuery("CALL getTenArticles(" + pageNumber + ",N'" + category + "');");
 
-            //int ci = 0;
             while(rSet.next()) {
                 _post tempPost = new _post();
 
@@ -61,16 +62,19 @@ public class postDAO {
         try {
             ResultSet rSet;
             if(!category.equals("default")) {
-                rSet = dbProvider.dbExecuteQuery("SELECT COUNT(c_postid) AS numE FROM tb_posts WHERE c_category = '" + category + "'");
+                // rSet = dbProvider.dbExecuteQuery("SELECT COUNT(c_postid) AS numE FROM tb_posts WHERE c_category = '" + category + "'");
+                rSet = dbProvider.dbExecuteQuery("SELECT COUNT(c_postid) AS numE FROM tb_posts WHERE c_category = N'" + category + "'");
+
                 while(rSet.next()) {
-                counter = rSet.getInt("numE");
-                break;
+                    counter = rSet.getInt("numE");
+                    break;
                 }
             } else {
+                // rSet = dbProvider.dbExecuteQuery("SELECT COUNT(c_postid) AS numE FROM tb_posts");
                 rSet = dbProvider.dbExecuteQuery("SELECT COUNT(c_postid) AS numE FROM tb_posts");
                 while(rSet.next()) {
-                counter = rSet.getInt("numE");
-                break;
+                    counter = rSet.getInt("numE");
+                    break;
                 }
             }
         } catch (Exception e) {

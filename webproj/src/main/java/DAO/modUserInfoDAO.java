@@ -14,9 +14,11 @@ public class modUserInfoDAO {
         String disName = "";
 
         try {
-            rSet = dbProvider.dbExecuteQuery("SELECT * FROM [dbo].[tb_mod_user_info] WHERE c_muname = '" + userName + "'");
+            // rSet = dbProvider.dbExecuteQuery("SELECT * FROM [dbo].[tb_mod_user_info] WHERE c_muname = '" + userName + "'");
+            rSet = dbProvider.dbExecuteQuery("SELECT * FROM tb_mod_user_info WHERE c_muname = '" + userName + "'");
             while(rSet.next()) {
                 disName = rSet.getString("c_dis_name");
+                break;
             }
         } catch (Exception e) {
             e.printStackTrace();

@@ -13,7 +13,8 @@ public class modUserAccDAO {
         DBProvider dbProvider = new DBProvider();
 
         try {
-            dbProvider.dbExecuteQuery("EXEC dbo.insMod @uname = '" + userAcc.getUsername() + "', @passwd = '" + userAcc.getPassword() + "', @disname = N'" + userInfo.getDisplayName() +"'");
+            // dbProvider.dbExecuteQuery("EXEC dbo.insMod @uname = '" + userAcc.getUsername() + "', @passwd = '" + userAcc.getPassword() + "', @disname = N'" + userInfo.getDisplayName() +"'");
+            dbProvider.dbExecuteQuery("CALL insMod('" + userAcc.getUsername() + "', '" + userAcc.getPassword() + "', N'" + userInfo.getDisplayName() + "');");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -25,7 +26,8 @@ public class modUserAccDAO {
         boolean existed = false;
 
         try {
-            ResultSet rSet = dbProvider.dbExecuteQuery("SELECT COUNT(c_muname) as numE FROM [dbo].[tb_mod_user_acc] WHERE c_muname = '" + userName + "'");
+            // ResultSet rSet = dbProvider.dbExecuteQuery("SELECT COUNT(c_muname) as numE FROM [dbo].[tb_mod_user_acc] WHERE c_muname = '" + userName + "'");
+            ResultSet rSet = dbProvider.dbExecuteQuery("SELECT COUNT(c_muname) as numE FROM tb_mod_user_acc WHERE c_muname = '" + userName + "'");
 
             while(rSet.next()) {
                 int tempN = rSet.getInt("numE");
@@ -46,6 +48,7 @@ public class modUserAccDAO {
         boolean existed = false;
 
         try {
+            // ResultSet rSet = dbProvider.dbExecuteQuery("SELECT COUNT(c_muname) AS numE FROM tb_mod_user_acc WHERE c_muname = '" + mUA.getUsername() + "' AND c_mpasswd = '" + mUA.getPassword() + "'");
             ResultSet rSet = dbProvider.dbExecuteQuery("SELECT COUNT(c_muname) AS numE FROM tb_mod_user_acc WHERE c_muname = '" + mUA.getUsername() + "' AND c_mpasswd = '" + mUA.getPassword() + "'");
 
             while(rSet.next()) {
@@ -64,7 +67,10 @@ public class modUserAccDAO {
     public void changePassword (_modUserAcc mUA) {
         DBProvider dbProvider = new DBProvider();
         try {
-            dbProvider.dbExecuteUpdate("EXEC dbo.changePasswdMod @uname = '" + mUA.getUsername() + "', @passwd = '" + mUA.getPassword() + "'");
+            // dbProvider.dbExecuteUpdate("EXEC dbo.changePasswdMod @uname = '" + mUA.getUsername() + "', @passwd = '" + mUA.getPassword() + "'");
+            dbProvider.dbExecuteUpdate("CALL changePasswdMod('" + mUA.getUsername() + "', '" + mUA.getPassword() + "');");
+
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -75,6 +81,7 @@ public class modUserAccDAO {
 
         DBProvider dbProvider = new DBProvider();
         try {
+            // ResultSet rSet = dbProvider.dbExecuteQuery("SELECT c_muname FROM tb_mod_user_acc WHERE c_mpasswd != ''");
             ResultSet rSet = dbProvider.dbExecuteQuery("SELECT c_muname FROM tb_mod_user_acc WHERE c_mpasswd != ''");
             while (rSet.next()) {
                 _modUserAcc tempM = new _modUserAcc();

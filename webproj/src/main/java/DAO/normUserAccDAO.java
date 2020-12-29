@@ -17,7 +17,8 @@ public class normUserAccDAO {
         DBProvider dbProvider = new DBProvider();
 
         try {
-            dbProvider.dbExecuteUpdate("EXEC dbo.insNormUser @uname = '" + normAcc.getUsername() + "', @passwd = '" + normAcc.getPassword()+ "'");
+            // dbProvider.dbExecuteUpdate("EXEC dbo.insNormUser @uname = '" + normAcc.getUsername() + "', @passwd = '" + normAcc.getPassword()+ "'");
+            dbProvider.dbExecuteUpdate("CALL insNormUser('" + normAcc.getUsername() + "', '" + normAcc.getPassword() + "');");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -29,7 +30,8 @@ public class normUserAccDAO {
         boolean existed = false;
 
         try {
-            ResultSet rSet = dbProvider.dbExecuteQuery("SELECT COUNT(c_nuname) as numE FROM [dbo].[tb_norm_user_acc] WHERE c_nuname = '" + userName + "'");
+            // ResultSet rSet = dbProvider.dbExecuteQuery("SELECT COUNT(c_nuname) as numE FROM [dbo].[tb_norm_user_acc] WHERE c_nuname = '" + userName + "'");
+            ResultSet rSet = dbProvider.dbExecuteQuery("SELECT COUNT(c_nuname) as numE FROM tb_norm_user_acc WHERE c_nuname = '" + userName + "'");
 
             while(rSet.next()) {
                 int tempN = rSet.getInt("numE");
@@ -50,6 +52,7 @@ public class normUserAccDAO {
         boolean existed = false;
 
         try {
+            // ResultSet rSet = dbProvider.dbExecuteQuery("SELECT COUNT(c_nuname) as numE FROM tb_norm_user_acc WHERE c_nuname = '" + nUA.getUsername() + "' and c_npasswd = '" + nUA.getPassword() + "'");
             ResultSet rSet = dbProvider.dbExecuteQuery("SELECT COUNT(c_nuname) as numE FROM tb_norm_user_acc WHERE c_nuname = '" + nUA.getUsername() + "' and c_npasswd = '" + nUA.getPassword() + "'");
 
             while(rSet.next()) {
